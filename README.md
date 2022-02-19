@@ -4,7 +4,7 @@ PipeWrench is an iOS library that can be linked into a [testing target](https://
 #### How Does It Work?
 PipeWrench copies `NSTask.h` from the macOS SDK, and then shells out to the `leaks` command line tool to do all the heavy lifting.
 
-Since iOS doesn't have `NSTask`, this PipeWrench is limited to running on the iOS Simulator.
+Since iOS doesn't have `NSTask`, PipeWrench is limited to running on the iOS Simulator.
 
 #### Why Wouldn't I Use The Memory Graph In Xcode?
 Can't press buttons manually when running automated tests on CI systems. Even if you could, it would be very tedious to have to press the same button all the time.
