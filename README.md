@@ -60,3 +60,12 @@ Process 78941: 1 leak for 32 total leaked bytes.
 ````
 
 which tells us there is one leak found, along with the memory address.
+
+Additional tools like `heap` can then be used to find out more information about what is leaking:
+
+```
+¯\_(ツ)_/¯ heap "--addresses=all" "/Users/z/Desktop/AppTests.xctest.memgraph" | grep 0x6000017ebc40
+0x6000017ebc40: non-object (32 bytes)
+```
+
+Which tells us that some `malloc`'d memory is sticking around somewhere that isn't recognizable as an object in iOS runtime (for example: no [`isa` pointer](https://developer.apple.com/documentation/objectivec/id/1418809-isa)).
