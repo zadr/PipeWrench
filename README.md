@@ -12,6 +12,9 @@ Can't press buttons manually when running automated tests on CI systems. Even if
 #### Integration?
 This is a prototype. If you want to use PipeWrench, you'll have to add it as a submodule and deal with the xcodeproj manually.
 
+#### Wait, that's it?
+Yeah, pretty much. Link `PipeWrench` into your test target. Set `EnablePipeWrench` as an environment variable. And the rest is automatic.
+
 #### Running the Prototype?
 1. Open `App.xcodeproj`.
 2. Update `memgraphLocation(for:)` and change the path to something that exists on your machine. By placing this file outside of the iOS sandbox, it is possible to run other tools on this file post-hoc— such as opening it up in Xcode to see the memory graph view.
