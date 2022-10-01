@@ -9,7 +9,7 @@
 
 __attribute__((constructor))
 static void autostart(void) {
-	BOOL enablePipeWrench = [NSProcessInfo.processInfo.environment[@"EnablePipeWrench"] boolValue];
+	BOOL enablePipeWrench = [NSProcessInfo.processInfo.environment[PipeWrenchConstants.Enabled] boolValue];
 	if (enablePipeWrench) {
 		// https://developer.apple.com/library/archive/documentation/Performance/Conceptual/ManagingMemory/Articles/MallocDebug.html
 		setenv("MallocStackLogging", "1", 1);
