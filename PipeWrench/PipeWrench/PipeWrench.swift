@@ -11,11 +11,15 @@ import XCTest
 
 @objc(PWPipeWrench)
 public final class PipeWrench: NSObject {
-	@objc(sharedWrench)
-	public static let shared = PipeWrench()
 	private var isRunning = false
 
-	@objc public func start() {
+	internal var logger: LogIngest
+
+	@objc
+	public init(logger: LogIngest) {
+		self.logger = logger
+	}
+
 		if !isRunning {
 			isRunning = true
 			XCTestObservationCenter.shared.addTestObserver(self)
