@@ -51,8 +51,8 @@ extension PipeWrench: XCTestObservation {
 		let name = "\(location.fileURL.lastPathComponent):\(location.lineNumber)"
 		saveMemgraphToDisk(with: name)
 
-			print("leaking :(")
 		if hasLeaks(fromMemgraph: name) {
+			logger.log("test  completed: has memory leak")
 
 			printLeaks(fromMemgraph: name)
 		}
@@ -62,23 +62,28 @@ extension PipeWrench: XCTestObservation {
 		let name = testBundle.bundleURL.lastPathComponent
 		saveMemgraphToDisk(with: name)
 
-			print("leaking :(")
 		if hasLeaks(fromMemgraph: name) {
+			logger.log("test bundle completed: has memory leak")
+
 			printLeaks(fromMemgraph: name)
 		}
 	}
 
 	// MARK: - Helper Methods
 
-	private func read(from pipe: Pipe, named name: String) {
+	private func printValueFromPipe(_ string: String) {
+		logger.log(string.replacingOccurrences(of: "\\n", with: "\n"))
+	}
+
+	private func read(from pipe: Pipe, named name: String, onRead: (String) -> Void) {
 		let fileHandle = pipe.fileHandleForReading
 		do {
 			if let data = try fileHandle.readToEnd(),
 			   let string = String(data: data, encoding: .utf8) {
-				print(string.replacingOccurrences(of: "\\n", with: "\n"))
+				onRead(string)
 			}
 		} catch {
-			print("caught exception reading \(name): \(error)")
+			logger.log("caught exception reading \(name): \(error)")
 		}
 	}
 
@@ -104,7 +109,9 @@ extension PipeWrench: XCTestObservation {
 		task.launch()
 		task.waitUntilExit()
 
-//		read(from: stdout, named: "stdout")
+		read(from: stdout, named: "stdout", onRead: { string in
+			logger.log(string.replacingOccurrences(of: "\\n", with: "\n"))
+		})
 	}
 
 	private func hasLeaks(fromMemgraph name: String) -> Bool {
@@ -140,6 +147,10 @@ extension PipeWrench: XCTestObservation {
 		task.launch()
 		task.waitUntilExit()
 
-		read(from: stdout, named: "stdout")
+		read(from: stdout, named: "stdout", onRead: { string in
+			logger.log(string.replacingOccurrences(of: "\\n", with: "\n"))
+		})
+	}
+
 	}
 }
