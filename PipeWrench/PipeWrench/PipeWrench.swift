@@ -12,6 +12,7 @@ import XCTest
 @objc(PWPipeWrench)
 public final class PipeWrench: NSObject {
 	private var isRunning = false
+	private var memgraphDirectory: String!
 
 	internal var logger: LogIngest
 
@@ -20,11 +21,16 @@ public final class PipeWrench: NSObject {
 		self.logger = logger
 	}
 
+	@objc public func start() throws {
 		if !isRunning {
+			let path = ProcessInfo.processInfo.environment[PipeWrenchConstants.MemgraphRootDirectory] ?? FileManager.default.temporaryDirectory.absoluteString
+			try validatePathForMemgraphStorage(path)
+			memgraphDirectory = path
 
 			try addLoggers()
 
 			isRunning = true
+
 			XCTestObservationCenter.shared.addTestObserver(self)
 		}
 	}
@@ -77,7 +83,7 @@ extension PipeWrench: XCTestObservation {
 	}
 
 	private func memgraphLocation(for name: String) -> String {
-		"/Users/z/Desktop/\(name).memgraph"
+		memgraphDirectory + "/\(name).memgraph"
 	}
 
 	// MARK: - Methods That Do Things

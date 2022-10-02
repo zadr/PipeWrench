@@ -20,6 +20,21 @@ import Foundation
 	/// Evaluated with truthiness as defined by NSNumber https://developer.apple.com/documentation/foundation/nsnumber/1410865-boolvalue
 	public static let Enabled = "EnablePipeWrench"
 
+	// MARK: - Memgraph Management
+
+	///
+	/// Environment variable to set for memgraph storage.
+	///
+	/// This value must be a `String` that represents a path on disk.
+	/// If non-nil, Pipe Wrench will attempt to save files to this location.
+	/// If this variable is not set, Pipe Wrench will write to a temporary directory.
+	///
+	/// If the directory does not exist, Pipe Wrench will not attempt to create it, and will throw a `PipeWrenchDirectoryError.requestedMemgraphPathDoesNotExist` error
+	/// If an item exists at the requested path but it is not a directory, Pipe Wrench will throw a `PipeWrenchDirectoryError.requestedMemgraphPathIsNotADirectory` error
+	/// If the directory is not readable, Pipe Wrench will throw a `PipeWrenchDirectoryError.requestedMemgraphPathIsNotReadable` error
+	/// If the directory is not writable, Pipe Wrench will throw a `PipeWrenchDirectoryError.requestedMemgraphPathIsNotWritable` error
+	public static let MemgraphRootDirectory = "MemgraphRootDirectory"
+
 	// MARK: - Logging
 
 	///

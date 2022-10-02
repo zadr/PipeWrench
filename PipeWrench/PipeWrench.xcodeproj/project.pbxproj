@@ -11,7 +11,9 @@
 		192D02AE27C0E14B0072C2C8 /* autostart.m in Sources */ = {isa = PBXBuildFile; fileRef = 192D02AD27C0E14B0072C2C8 /* autostart.m */; };
 		192D02B127C0E1610072C2C8 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 192D02B027C0E1610072C2C8 /* XCTest.framework */; };
 		19AA268228E8D8F100B824A2 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AA268128E8D8F100B824A2 /* Constants.swift */; };
+		19AA268428E8DE3200B824A2 /* PathUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AA268328E8DE3200B824A2 /* PathUtilities.swift */; };
 		19AA268628E8DE6300B824A2 /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AA268528E8DE6300B824A2 /* Logging.swift */; };
+		19AA268828E907BD00B824A2 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AA268728E907BD00B824A2 /* Errors.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,7 +35,9 @@
 		192D02AD27C0E14B0072C2C8 /* autostart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = autostart.m; sourceTree = "<group>"; };
 		192D02B027C0E1610072C2C8 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		19AA268128E8D8F100B824A2 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		19AA268328E8DE3200B824A2 /* PathUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathUtilities.swift; sourceTree = "<group>"; };
 		19AA268528E8DE6300B824A2 /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
+		19AA268728E907BD00B824A2 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,7 +75,9 @@
 				192D02AD27C0E14B0072C2C8 /* autostart.m */,
 				192D02AC27C0E14B0072C2C8 /* NSTask.h */,
 				192D029F27C0E12B0072C2C8 /* PipeWrench.swift */,
+				19AA268728E907BD00B824A2 /* Errors.swift */,
 				19AA268528E8DE6300B824A2 /* Logging.swift */,
+				19AA268328E8DE3200B824A2 /* PathUtilities.swift */,
 				19AA268128E8D8F100B824A2 /* Constants.swift */,
 			);
 			path = PipeWrench;
@@ -148,6 +154,8 @@
 				19AA268628E8DE6300B824A2 /* Logging.swift in Sources */,
 				192D02AE27C0E14B0072C2C8 /* autostart.m in Sources */,
 				19AA268228E8D8F100B824A2 /* Constants.swift in Sources */,
+				19AA268828E907BD00B824A2 /* Errors.swift in Sources */,
+				19AA268428E8DE3200B824A2 /* PathUtilities.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
