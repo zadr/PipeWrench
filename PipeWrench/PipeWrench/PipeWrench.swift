@@ -73,7 +73,7 @@ extension PipeWrench: XCTestObservation {
 	}
 
 	public func testCaseDidFinish(_ testCase: XCTestCase) {
-		let eraseOnCompletionEnvironment = ProcessInfo.processInfo.environment[PipeWrenchConstants.MemgraphErasedAfterTestCompletion] ?? "false"
+		let eraseOnCompletionEnvironment = ProcessInfo.processInfo.environment[PipeWrenchConstants.EraseMemgraphAfterTestCompletion] ?? "false"
 		let eraseOnCompletionValue = (eraseOnCompletionEnvironment as NSString).boolValue
 		guard eraseOnCompletionValue else {
 			return

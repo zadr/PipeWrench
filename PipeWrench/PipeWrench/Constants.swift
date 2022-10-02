@@ -41,7 +41,7 @@ import Foundation
 	/// If not set, Pipe Wrench will preserve memgraph files when tests end.
 	///
 	/// This value may be a `Boolean` (YES/NO, true/false), a `Number` (0/1) or a `String` of the preceeding values.
-	public static let MemgraphErasedAfterTestCompletion = "MemgraphErasedAfterTestCompletion"
+	public static let EraseMemgraphAfterTestCompletion = "EraseMemgraphAfterTestCompletion"
 
 	// MARK: - Logging
 
