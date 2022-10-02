@@ -49,22 +49,22 @@ extension PipeWrench: XCTestObservation {
 	public func testCase(_ testCase: XCTestCase, didRecord expectedFailure: XCTExpectedFailure) {
 		let location = expectedFailure.issue.sourceCodeContext.location!
 		let name = "\(location.fileURL.lastPathComponent):\(location.lineNumber)"
-		saveMemgraphToDisk(for: name)
+		saveMemgraphToDisk(with: name)
 
-		if hasLeaksFromMemgraph(for: name) {
 			print("leaking :(")
+		if hasLeaks(fromMemgraph: name) {
 
-			printLeaksFromMemgraph(for: name)
+			printLeaks(fromMemgraph: name)
 		}
 	}
 
 	public func testBundleDidFinish(_ testBundle: Bundle) {
 		let name = testBundle.bundleURL.lastPathComponent
-		saveMemgraphToDisk(for: name)
+		saveMemgraphToDisk(with: name)
 
-		if hasLeaksFromMemgraph(for: name) {
 			print("leaking :(")
-			printLeaksFromMemgraph(for: name)
+		if hasLeaks(fromMemgraph: name) {
+			printLeaks(fromMemgraph: name)
 		}
 	}
 
@@ -88,7 +88,7 @@ extension PipeWrench: XCTestObservation {
 
 	// MARK: - Methods That Do Things
 
-	private func saveMemgraphToDisk(for name: String) {
+	private func saveMemgraphToDisk(with name: String) {
 		let task = NSTask()
 		task.executableURL = URL(fileURLWithPath: "/usr/bin/leaks")
 		task.arguments = [
@@ -107,7 +107,7 @@ extension PipeWrench: XCTestObservation {
 //		read(from: stdout, named: "stdout")
 	}
 
-	private func hasLeaksFromMemgraph(for name: String) -> Bool {
+	private func hasLeaks(fromMemgraph name: String) -> Bool {
 		let task = NSTask()
 		task.executableURL = URL(fileURLWithPath: "/usr/bin/leaks")
 		task.arguments = [
@@ -125,7 +125,7 @@ extension PipeWrench: XCTestObservation {
 		return task.terminationStatus == 1
 	}
 
-	private func printLeaksFromMemgraph(for name: String) {
+	private func printLeaks(fromMemgraph name: String) {
 		let task = NSTask()
 		task.executableURL = URL(fileURLWithPath: "/usr/bin/leaks")
 		task.arguments = [
