@@ -6,6 +6,7 @@
 //
 
 public enum PipeWrenchDiskError: Error {
+	case requestedPathExists
 	case requestedPathDoesNotExist
 	case requestedPathIsNotADirectory
 	case requestedPathIsNotReadable

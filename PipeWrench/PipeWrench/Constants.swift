@@ -44,4 +44,16 @@ import Foundation
 	///
 	/// This value may be a `Boolean` (YES/NO, true/false), a `Number` (0/1) or a `String` of the preceeding values.
 	public static let ConsoleLoggingEnabled = "ConsoleLoggingEnabled"
+
+	///
+	/// Environment variable to set for memgraph storage.
+	///
+	/// This value must be a `String` that represents a path on disk.
+	/// If non-nil, Pipe Wrench will attempt to save files to this location.
+	/// If this variable is not set, Pipe Wrench will write to a temporary directory.
+	///
+	/// If the file already exists, Pipe Wrench will not attempt to append or overwrite, and will throw a `PipeWrenchDiskError.requestedPathExists` error
+	/// If the path is not readable, Pipe Wrench will throw a `PipeWrenchDiskError.requestedPathIsNotReadable` error
+	/// If the path is not writable, Pipe Wrench will throw a `PipeWrenchDiskError.requestedPathIsNotWritable` error
+	public static let DiskLoggingPath = "DiskLoggingPath"
 }

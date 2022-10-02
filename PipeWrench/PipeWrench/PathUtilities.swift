@@ -28,3 +28,18 @@ internal func validatePathForMemgraphStorage(_ path: String) throws {
 	}
 }
 
+internal func validatePathForLoggingStorage(_ path: String) throws {
+	let fileManager = FileManager()
+
+	if fileManager.fileExists(atPath: path, isDirectory: nil) {
+		throw PipeWrenchDiskError.requestedPathExists
+	}
+
+	if !fileManager.isReadableFile(atPath: path) {
+		throw PipeWrenchDiskError.requestedPathIsNotReadable
+	}
+
+	if !fileManager.isReadableFile(atPath: path) {
+		throw PipeWrenchDiskError.requestedPathIsNotWritable
+	}
+}

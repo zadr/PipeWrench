@@ -39,6 +39,24 @@ public final class ConsoleLogger: LogEgress {
 	}
 }
 
+public final class FileLogger: LogEgress {
+	let handle: FileHandle
+
+	init(path: String) throws {
+		try validatePathForLoggingStorage(path)
+		handle = FileHandle(forWritingAtPath: path)!
+		try handle.seekToEnd()
+	}
+
+	deinit {
+		try? handle.close()
+	}
+
+	public func log(_ message: String) {
+		try? handle.write(contentsOf: (message + "\n").data(using: .utf8)!)
+	}
+}
+
 // MARK: - Configuration
 
 internal extension PipeWrench {
@@ -49,6 +67,14 @@ internal extension PipeWrench {
 		if consoleLoggingEnabled {
 			logger.add(egressTarget: ConsoleLogger())
 		}
+
+		let tentativePath = ProcessInfo.processInfo.environment[PipeWrenchConstants.DiskLoggingPath]
+		if let tentativePath = tentativePath {
+			let fileLogger = try FileLogger(path: tentativePath)
+			logger.add(egressTarget: fileLogger)
+		}
+	}
+
 	func removeLoggers() {
 		logger.removeAll()
 	}
