@@ -12,7 +12,9 @@ import XCTest
 @objc(PWPipeWrench)
 public final class PipeWrench: NSObject {
 	private var isRunning = false
+
 	private var memgraphDirectory: String!
+	internal var memgraphNames = Set<String>()
 
 	internal var logger: LogIngest
 
@@ -70,6 +72,19 @@ extension PipeWrench: XCTestObservation {
 		}
 	}
 
+	public func testCaseDidFinish(_ testCase: XCTestCase) {
+		let eraseOnCompletionEnvironment = ProcessInfo.processInfo.environment[PipeWrenchConstants.MemgraphErasedAfterTestCompletion] ?? "false"
+		let eraseOnCompletionValue = (eraseOnCompletionEnvironment as NSString).boolValue
+		guard eraseOnCompletionValue else {
+			return
+		}
+
+		for name in memgraphNames {
+			let fileManager = FileManager()
+			try? fileManager.removeItem(atPath: memgraphLocation(for: name))
+		}
+	}
+
 	// MARK: - Helper Methods
 
 	private func printValueFromPipe(_ string: String) {
@@ -95,6 +110,8 @@ extension PipeWrench: XCTestObservation {
 	// MARK: - Methods That Do Things
 
 	private func saveMemgraphToDisk(with name: String) {
+		memgraphNames.insert(name)
+
 		let task = NSTask()
 		task.executableURL = URL(fileURLWithPath: "/usr/bin/leaks")
 		task.arguments = [

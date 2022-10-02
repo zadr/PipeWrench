@@ -35,6 +35,14 @@ import Foundation
 	/// If the directory is not writable, Pipe Wrench will throw a `PipeWrenchDirectoryError.requestedMemgraphPathIsNotWritable` error
 	public static let MemgraphRootDirectory = "MemgraphRootDirectory"
 
+	///
+	/// Environment variable to set if Pipe Wrench should remove memgraph files when tests complete.
+	///
+	/// If not set, Pipe Wrench will preserve memgraph files when tests end.
+	///
+	/// This value may be a `Boolean` (YES/NO, true/false), a `Number` (0/1) or a `String` of the preceeding values.
+	public static let MemgraphErasedAfterTestCompletion = "MemgraphErasedAfterTestCompletion"
+
 	// MARK: - Logging
 
 	///
