@@ -66,6 +66,7 @@ extension PipeWrench: XCTestObservation {
 			logger.log("test bundle completed: has memory leak")
 
 			printLeaks(fromMemgraph: name)
+			findAddressesForLeaks(fromMemgraph: name)
 		}
 	}
 
@@ -152,5 +153,71 @@ extension PipeWrench: XCTestObservation {
 		})
 	}
 
+	private func findAddressesForLeaks(fromMemgraph name: String) {
+		let task = NSTask()
+		task.executableURL = URL(fileURLWithPath: "/usr/bin/leaks")
+		task.arguments = [
+			"\(memgraphLocation(for: name))"
+		]
+
+		let (stderr, stdout, stdin) = (Pipe(), Pipe(), Pipe())
+		task.standardError = stderr
+		task.standardOutput = stdout
+		task.standardInput = stdin
+
+		task.launch()
+		task.waitUntilExit()
+
+//		for addr in `leaks ~/Desktop/MemgraphTests.xctest.memgraph | grep LEAK | awk '{ print $6 }’`
+//		do
+//			heap --addresses=all ~/Desktop/MemgraphTests.xctest.memgraph | grep $leak
+//		done
+		read(from: stdout, named: "stdout", onRead: { string in
+			for line in string.components(separatedBy: "\n") {
+				if !line.contains("LEAK") {
+					continue
+				}
+
+				let regex = try? NSRegularExpression(pattern: "0x(\\d|\\w)*", options: [])
+				let range = NSRange(location: 0, length: (line as NSString).length )
+				regex?.enumerateMatches(in: line, options: [], range: range) { result, flags, stop in
+					if let result = result {
+						let result = (line as NSString).substring(with: result.range)
+						printClass(for: result, fromMemgraph: name)
+					}
+				}
+			}
+		})
+	}
+
+	// heap --addresses=all ~/Desktop/MemgraphTests.xctest.memgraph | grep $leak
+	private func printClass(for address: String, fromMemgraph name: String) {
+		logger.log("heap for \(address) \(memgraphLocation(for: name))")
+
+		let task = NSTask()
+		task.executableURL = URL(fileURLWithPath: "/usr/bin/heap")
+		task.arguments = [
+			"--addresses=all",
+			"\(memgraphLocation(for: name))"
+		]
+
+		let (stderr, stdout, stdin) = (Pipe(), Pipe(), Pipe())
+		task.standardError = stderr
+		task.standardOutput = stdout
+		task.standardInput = stdin
+
+		task.launch()
+		task.waitUntilExit()
+
+		logger.log("addr \(address)")
+		read(from: stdin, named: "stdin", onRead: { string in
+			logger.log(string.replacingOccurrences(of: "\\n", with: "\n"))
+		})
+		read(from: stdout, named: "stdout", onRead: { string in
+			logger.log(string.replacingOccurrences(of: "\\n", with: "\n"))
+		})
+		read(from: stderr, named: "stderr", onRead: { string in
+			logger.log(string.replacingOccurrences(of: "\\n", with: "\n"))
+		})
 	}
 }
