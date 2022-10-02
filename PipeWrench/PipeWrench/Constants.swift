@@ -7,7 +7,8 @@
 
 import Foundation
 
-@objc @objcMembers public final class PipeWrenchConstants: NSObject {
+@objc @objcMembers
+public final class PipeWrenchConstants: NSObject {
 
 	// MARK: - Enable / Disable
 
