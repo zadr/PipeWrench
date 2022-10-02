@@ -32,3 +32,24 @@ public final class LogIngest: NSObject, LogEgress {
 		}
 	}
 }
+
+public final class ConsoleLogger: LogEgress {
+	public func log(_ message: String) {
+		print(message)
+	}
+}
+
+// MARK: - Configuration
+
+internal extension PipeWrench {
+	func addLoggers() throws {
+		let consoleLoggingRequested = ProcessInfo.processInfo.environment[PipeWrenchConstants.ConsoleLoggingEnabled] ?? "true"
+		let consoleLoggingEnabled = (consoleLoggingRequested as NSString).boolValue
+
+		if consoleLoggingEnabled {
+			logger.add(egressTarget: ConsoleLogger())
+		}
+	func removeLoggers() {
+		logger.removeAll()
+	}
+}

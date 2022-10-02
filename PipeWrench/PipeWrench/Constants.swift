@@ -19,4 +19,14 @@ import Foundation
 	/// This value may be a `Boolean` (YES/NO, true/false), a `Number` (0/1) or a `String` of the preceeding values.
 	/// Evaluated with truthiness as defined by NSNumber https://developer.apple.com/documentation/foundation/nsnumber/1410865-boolvalue
 	public static let Enabled = "EnablePipeWrench"
+
+	// MARK: - Logging
+
+	///
+	/// Environment variable to set if Pipe Wrench should remove memgraph files when tests complete.
+	///
+	/// If not set, Pipe Wrench will log to console.
+	///
+	/// This value may be a `Boolean` (YES/NO, true/false), a `Number` (0/1) or a `String` of the preceeding values.
+	public static let ConsoleLoggingEnabled = "ConsoleLoggingEnabled"
 }

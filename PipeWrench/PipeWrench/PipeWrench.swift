@@ -21,6 +21,9 @@ public final class PipeWrench: NSObject {
 	}
 
 		if !isRunning {
+
+			try addLoggers()
+
 			isRunning = true
 			XCTestObservationCenter.shared.addTestObserver(self)
 		}
@@ -30,6 +33,8 @@ public final class PipeWrench: NSObject {
 		if isRunning {
 			XCTestObservationCenter.shared.removeTestObserver(self)
 			isRunning = false
+
+			removeLoggers()
 		}
 	}
 }
