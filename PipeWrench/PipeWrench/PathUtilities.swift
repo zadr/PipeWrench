@@ -23,7 +23,7 @@ internal func validatePathForMemgraphStorage(_ path: String) throws {
 		throw PipeWrenchDiskError.requestedPathIsNotReadable
 	}
 
-	if !fileManager.isReadableFile(atPath: path) {
+	if !fileManager.isWritableFile(atPath: path) {
 		throw PipeWrenchDiskError.requestedPathIsNotWritable
 	}
 }
