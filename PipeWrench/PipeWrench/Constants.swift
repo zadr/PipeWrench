@@ -36,6 +36,14 @@ import Foundation
 	public static let MemgraphRootDirectory = "MemgraphRootDirectory"
 
 	///
+	/// Environment variable to control whether PipeWrench will make a directory for saving files or not.
+	///
+	/// By default, PipeWrench will not create directories if they do not exist on disk.
+	///
+	/// This value may be a `Boolean` (YES/NO, true/false), a `Number` (0/1) or a `String` of the preceeding values.
+	public static let CreateMemgraphRootDirectory = "CreateMemgraphRootDirectory"
+
+	///
 	/// Environment variable to set if Pipe Wrench should remove memgraph files when tests complete.
 	///
 	/// If not set, Pipe Wrench will preserve memgraph files when tests end.

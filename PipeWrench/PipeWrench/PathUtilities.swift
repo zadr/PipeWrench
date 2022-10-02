@@ -12,7 +12,13 @@ internal func validatePathForMemgraphStorage(_ path: String) throws {
 
 	var isDirectory: ObjCBool = false
 	if !fileManager.fileExists(atPath: path, isDirectory: &isDirectory) {
-		throw PipeWrenchDiskError.requestedPathDoesNotExist
+		let createIfDirectoryDoesNotExistEnvironment = ProcessInfo.processInfo.environment[PipeWrenchConstants.CreateMemgraphRootDirectory] ?? "false"
+		let createIfDirectoryDoesNotExistValue = (createIfDirectoryDoesNotExistEnvironment as NSString).boolValue
+		if !createIfDirectoryDoesNotExistValue {
+			throw PipeWrenchDiskError.requestedPathDoesNotExist
+		}
+
+		try fileManager.createDirectory(atPath: path, withIntermediateDirectories: true)
 	}
 
 	if !isDirectory.boolValue {

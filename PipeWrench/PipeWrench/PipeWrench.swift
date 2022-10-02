@@ -25,7 +25,7 @@ public final class PipeWrench: NSObject {
 
 	@objc public func start() throws {
 		if !isRunning {
-			let path = ProcessInfo.processInfo.environment[PipeWrenchConstants.MemgraphRootDirectory] ?? FileManager.default.temporaryDirectory.absoluteString
+			let path = ProcessInfo.processInfo.environment[PipeWrenchConstants.MemgraphRootDirectory] ?? (FileManager.default.temporaryDirectory.absoluteString as NSString).appendingPathComponent("PipeWrench")
 			try validatePathForMemgraphStorage(path)
 			memgraphDirectory = path
 
