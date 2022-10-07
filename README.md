@@ -14,8 +14,8 @@ This is a prototype. If you want to use PipeWrench, you'll have to add it as a s
 
 #### Running the Prototype?
 1. Open `App.xcodeproj`.
-2. Update `memgraphLocation(for:)` and change the path to something that exists on your machine. By placing this file outside of the iOS sandbox, it is possible to run other tools on this file post-hoc— such as opening it up in Xcode to see the memory graph view.
-3. Hit ⌘U to run tests. When running with Xcode 13.2.1, you'll see something like this at the end of the test run:
+2. Hit ⌘U to run tests. When running with Xcode 13.2.1, you'll see something like this at the end of the test run:
+
 
 ```
 Test Suite 'Selected tests' started at 2022-02-19 00:30:11.360
