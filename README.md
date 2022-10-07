@@ -12,6 +12,17 @@ Can't press buttons manually when running automated tests on CI systems. Even if
 #### Integration?
 This is a prototype. If you want to use PipeWrench, you'll have to add it as a submodule and deal with the xcodeproj manually.
 
+#### Environment Variables
+There are a handful of environment variables that control PipeWrench's behavior. These are best set as part of the target's build and run configuration. Here is a brief overview of available environment variables:
+
+- `EnablePipeWrench` - Default: `false`. Should PipeWrench automatically track leaks when linked into a test target that is loaded into memory? It is not required to start PipeWrench at load-time; calling `let pipeWrench = PipeWrench(logger: PWLogIngest()) ; try? pipeWrench.start()` will also result in leaks being tracked, for example, on a per-test or per-test case basis.
+- `MemgraphRootDirectory` - Default: `/tmp/PipeWrench/<uuid>/`. Where on disk should memgraph files be saved? By default, PipeWrench will save files to a directory under `/tmp/PipeWrench/` with a new uuid for each instance of PipeWrench.
+- `CreateMemgraphRootDirectory` - Default: `false`. If a directory to save memgraph files to does not exist, should it be created?
+- `ConsoleLoggingEnabled` - Default: `true`. Should PipeWrench log any output (debug or informational) to the device console?
+- `DiskLoggingPath` - Default: `nil`. If non-nil, PipeWrench will write any log output to a file on disk.
+
+For more context, see swiftdoc in [Constants.swift](https://github.com/zadr/PipeWrench/blob/main/PipeWrench/PipeWrench/Constants.swift).
+
 #### Running the Prototype?
 1. Open `App.xcodeproj`.
 2. Hit ⌘U to run tests. When running with Xcode 13.2.1, you'll see something like this at the end of the test run:
