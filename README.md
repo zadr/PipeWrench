@@ -2,7 +2,7 @@
 PipeWrench is an iOS library that can be linked into a [testing target](https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/testing_with_xcode/chapters/01-introduction.html#//apple_ref/doc/uid/TP40014132) that automatically runs `leaks` when a test fails, and when a test suite finishes running.
 
 #### How Does It Work?
-PipeWrench copies `NSTask.h` from the macOS SDK, and then shells out to the `leaks` command line tool to do all the heavy lifting.
+PipeWrench copies `NSTask.h` from the macOS SDK, and then shells out to the [leaks](x-man-page://leaks) and [heap](x-man-page://heap) command line tool to do all the heavy lifting.
 
 Since iOS doesn't have `NSTask`, this PipeWrench is limited to running on the iOS Simulator.
 
@@ -26,7 +26,6 @@ For more context, see swiftdoc in [Constants.swift](https://github.com/zadr/Pipe
 #### Running the Prototype?
 1. Open `App.xcodeproj`.
 2. Hit ⌘U to run tests. When running with Xcode 13.2.1, you'll see something like this at the end of the test run:
-
 
 ```
 Test Suite 'Selected tests' started at 2022-02-19 00:30:11.360
