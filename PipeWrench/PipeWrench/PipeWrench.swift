@@ -16,7 +16,7 @@ public final class PipeWrench: NSObject {
 	private var memgraphDirectory: String!
 	private var memgraphNames = Set<String>()
 
-	private var logger: LogIngest
+	internal var logger: LogIngest
 
 	@objc
 	public init(logger: LogIngest) {
