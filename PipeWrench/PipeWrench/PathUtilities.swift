@@ -19,6 +19,10 @@ internal func validatePathForMemgraphStorage(_ path: String) throws {
 		}
 
 		try fileManager.createDirectory(atPath: path, withIntermediateDirectories: true)
+
+		if !fileManager.fileExists(atPath: path, isDirectory: &isDirectory) {
+			throw PipeWrenchDiskError.requestedPathCouldNotBeCreated
+		}
 	}
 
 	if !isDirectory.boolValue {
