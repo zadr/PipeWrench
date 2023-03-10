@@ -10,10 +10,12 @@ Pod::Spec.new do |s|
   s.author       = "PipeWrench Contributors"
   s.source       = { :git => "https://github.com/zadr/PipeWrench.git", 
                      :tag => "#{s.version}" }
+  s.requires_arc     = true
   s.platforms    = { :ios => "15.0" }
   s.swift_version = "5.0"
   s.source_files = [
-    "PipeWrench/PipeWrench/**/*"
+    "PipeWrench/**/*.{swift,h,m,c,mm}"
   ]
   s.weak_frameworks = "XCTest"
+  s.cocoapods_version = '>= 1.4.0'
 end

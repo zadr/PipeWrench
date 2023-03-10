@@ -5,7 +5,11 @@
 //  Created by Zachary Drayer on 1/29/22.
 //
 
-#import "PipeWrench-Swift.h"
+#if __has_include("PipeWrench-Swift.h")
+    #import "PipeWrench-Swift.h"
+#else
+    #import <PipeWrench/PipeWrench-Swift.h>
+#endif
 
 static PWPipeWrench *__PWPipeWrench_staticInstance__ = nil;
 
