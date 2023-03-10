@@ -9,8 +9,9 @@ Since iOS doesn't have `NSTask`, this PipeWrench is limited to running on the iO
 #### Why Wouldn't I Use The Memory Graph In Xcode?
 Can't press buttons manually when running automated tests on CI systems. Even if you could, it would be very tedious to have to press the same button all the time.
 
-#### Integration?
-This is a prototype. If you want to use PipeWrench, you'll have to add it as a submodule and deal with the xcodeproj manually.
+#### CocoaPods
+
+Add `pod 'PipeWrench'` to your Podfile.
 
 #### Environment Variables
 There are a handful of environment variables that control PipeWrench's behavior. These are best set as part of the target's build and run configuration. Here is a brief overview of available environment variables:
@@ -67,6 +68,10 @@ Process 78941: 31480 nodes malloced for 4419 KB
 Process 78941: 1 leak for 32 total leaked bytes.
 
     1 (32 bytes) ROOT LEAK: 0x6000017ebc40 [32]
-````
+```
 
 which tells us there is one leak found, along with the memory address.
+
+## License
+
+PipeWrench is available under the MIT license.
