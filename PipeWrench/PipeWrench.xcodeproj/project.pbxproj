@@ -8,12 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		192D02A027C0E12B0072C2C8 /* PipeWrench.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192D029F27C0E12B0072C2C8 /* PipeWrench.swift */; };
-		192D02AE27C0E14B0072C2C8 /* autostart.m in Sources */ = {isa = PBXBuildFile; fileRef = 192D02AD27C0E14B0072C2C8 /* autostart.m */; };
 		192D02B127C0E1610072C2C8 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 192D02B027C0E1610072C2C8 /* XCTest.framework */; };
 		19AA268228E8D8F100B824A2 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AA268128E8D8F100B824A2 /* Constants.swift */; };
 		19AA268428E8DE3200B824A2 /* PathUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AA268328E8DE3200B824A2 /* PathUtilities.swift */; };
 		19AA268628E8DE6300B824A2 /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AA268528E8DE6300B824A2 /* Logging.swift */; };
 		19AA268828E907BD00B824A2 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AA268728E907BD00B824A2 /* Errors.swift */; };
+		8E26311F29BB05E200261B22 /* AutoStartLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E26311E29BB05E200261B22 /* AutoStartLoader.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -32,12 +32,13 @@
 		192D029C27C0E12B0072C2C8 /* libPipeWrench.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPipeWrench.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		192D029F27C0E12B0072C2C8 /* PipeWrench.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipeWrench.swift; sourceTree = "<group>"; };
 		192D02AC27C0E14B0072C2C8 /* NSTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSTask.h; sourceTree = "<group>"; };
-		192D02AD27C0E14B0072C2C8 /* autostart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = autostart.m; sourceTree = "<group>"; };
 		192D02B027C0E1610072C2C8 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		19AA268128E8D8F100B824A2 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		19AA268328E8DE3200B824A2 /* PathUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathUtilities.swift; sourceTree = "<group>"; };
 		19AA268528E8DE6300B824A2 /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		19AA268728E907BD00B824A2 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
+		8E26311D29BB05E200261B22 /* AutoStartLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AutoStartLoader.h; sourceTree = "<group>"; };
+		8E26311E29BB05E200261B22 /* AutoStartLoader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AutoStartLoader.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,13 +73,14 @@
 		192D029E27C0E12B0072C2C8 /* PipeWrench */ = {
 			isa = PBXGroup;
 			children = (
-				192D02AD27C0E14B0072C2C8 /* autostart.m */,
 				192D02AC27C0E14B0072C2C8 /* NSTask.h */,
 				192D029F27C0E12B0072C2C8 /* PipeWrench.swift */,
 				19AA268728E907BD00B824A2 /* Errors.swift */,
 				19AA268528E8DE6300B824A2 /* Logging.swift */,
 				19AA268328E8DE3200B824A2 /* PathUtilities.swift */,
 				19AA268128E8D8F100B824A2 /* Constants.swift */,
+				8E26311D29BB05E200261B22 /* AutoStartLoader.h */,
+				8E26311E29BB05E200261B22 /* AutoStartLoader.m */,
 			);
 			path = PipeWrench;
 			sourceTree = "<group>";
@@ -150,9 +152,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E26311F29BB05E200261B22 /* AutoStartLoader.m in Sources */,
 				192D02A027C0E12B0072C2C8 /* PipeWrench.swift in Sources */,
 				19AA268628E8DE6300B824A2 /* Logging.swift in Sources */,
-				192D02AE27C0E14B0072C2C8 /* autostart.m in Sources */,
 				19AA268228E8D8F100B824A2 /* Constants.swift in Sources */,
 				19AA268828E907BD00B824A2 /* Errors.swift in Sources */,
 				19AA268428E8DE3200B824A2 /* PathUtilities.swift in Sources */,
