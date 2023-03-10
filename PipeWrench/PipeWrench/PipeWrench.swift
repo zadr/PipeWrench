@@ -125,7 +125,12 @@ extension PipeWrench: XCTestObservation {
 		task.standardOutput = stdout
 		task.standardInput = stdin
 
-		task.launch()
+        do {
+            try task.launchAndReturnError()
+        } catch {
+            logger.log("saveMemgraphToDisk task.launch returns error \(error.localizedDescription)")
+        }
+
 		task.waitUntilExit()
 
 		read(from: stdout, named: "stdout", onRead: { string in
@@ -145,7 +150,12 @@ extension PipeWrench: XCTestObservation {
 		task.standardOutput = stdout
 		task.standardInput = stdin
 
-		task.launch()
+        do {
+            try task.launchAndReturnError()
+        } catch {
+            logger.log("hasLeaks task.launch returns error \(error.localizedDescription)")
+        }
+
 		task.waitUntilExit()
 
 		return task.terminationStatus == 1
@@ -163,7 +173,12 @@ extension PipeWrench: XCTestObservation {
 		task.standardOutput = stdout
 		task.standardInput = stdin
 
-		task.launch()
+        do {
+            try task.launchAndReturnError()
+        } catch {
+            logger.log("printLeaks task.launch returns error \(error.localizedDescription)")
+        }
+
 		task.waitUntilExit()
 
 		read(from: stdout, named: "stdout", onRead: { string in
@@ -183,7 +198,12 @@ extension PipeWrench: XCTestObservation {
 		task.standardOutput = stdout
 		task.standardInput = stdin
 
-		task.launch()
+        do {
+            try task.launchAndReturnError()
+        } catch {
+            logger.log("findAddressesForLeaks task.launch returns error \(error.localizedDescription)")
+        }
+
 		task.waitUntilExit()
 
 //		for addr in `leaks ~/Desktop/MemgraphTests.xctest.memgraph | grep LEAK | awk '{ print $6 }’`
