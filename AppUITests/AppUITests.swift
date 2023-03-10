@@ -14,8 +14,8 @@ class AppUITests: XCTestCase {
     }
 
     func testLaunchPerformance() throws {
-		measure(metrics: [XCTApplicationLaunchMetric()]) {
-			XCUIApplication().launch()
-		}
+        measure(metrics: [XCTApplicationLaunchMetric()]) {
+            XCUIApplication().launch()
+        }
     }
 }
