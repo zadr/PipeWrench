@@ -16,6 +16,6 @@ class AppUITestsLaunchTests: XCTestCase {
         attachment.name = "Launch Screen"
         attachment.lifetime = .keepAlways
 
-		add(attachment)
+        add(attachment)
     }
 }

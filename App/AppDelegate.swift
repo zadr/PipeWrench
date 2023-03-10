@@ -11,7 +11,7 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {}
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-	var window: UIWindow?
+    var window: UIWindow?
 }
 
 class ViewController: UIViewController {}
