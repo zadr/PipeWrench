@@ -61,8 +61,8 @@ extension PipeWrench: XCTestObservation {
         }
     }
 
-    public func testBundleDidFinish(_ testBundle: Bundle) {
-        let name = testBundle.bundleURL.lastPathComponent
+    public func testCaseDidFinish(_ testCase: XCTestCase) {
+        let name = testCase.name
         saveMemgraphToDisk(with: name)
 
         if hasLeaks(fromMemgraph: name) {
@@ -71,9 +71,7 @@ extension PipeWrench: XCTestObservation {
             printLeaks(fromMemgraph: name)
             findAddressesForLeaks(fromMemgraph: name)
         }
-    }
 
-    public func testCaseDidFinish(_ testCase: XCTestCase) {
         let eraseOnCompletionEnvironment = ProcessInfo.processInfo.environment[PipeWrenchConstants.EraseMemgraphAfterTestCompletion] ?? "false"
         let eraseOnCompletionValue = (eraseOnCompletionEnvironment as NSString).boolValue
         guard eraseOnCompletionValue else {
@@ -96,7 +94,8 @@ extension PipeWrench: XCTestObservation {
         let fileHandle = pipe.fileHandleForReading
         do {
             if let data = try fileHandle.readToEnd(),
-               let string = String(data: data, encoding: .utf8) {
+               let string = String(data: data, encoding: .utf8)
+            {
                 onRead(string)
             }
         } catch {
@@ -117,7 +116,7 @@ extension PipeWrench: XCTestObservation {
         task.executableURL = URL(fileURLWithPath: "/usr/bin/leaks")
         task.arguments = [
             "\(getpid())",
-            "--outputGraph=\(memgraphLocation(for: name))"
+            "--outputGraph=\(memgraphLocation(for: name))",
         ]
 
         let (stderr, stdout, stdin) = (Pipe(), Pipe(), Pipe())
@@ -142,7 +141,7 @@ extension PipeWrench: XCTestObservation {
         let task = NSTask()
         task.executableURL = URL(fileURLWithPath: "/usr/bin/leaks")
         task.arguments = [
-            "\(memgraphLocation(for: name))"
+            "\(memgraphLocation(for: name))",
         ]
 
         let (stderr, stdout, stdin) = (Pipe(), Pipe(), Pipe())
@@ -165,7 +164,7 @@ extension PipeWrench: XCTestObservation {
         let task = NSTask()
         task.executableURL = URL(fileURLWithPath: "/usr/bin/leaks")
         task.arguments = [
-            "\(memgraphLocation(for: name))"
+            "\(memgraphLocation(for: name))",
         ]
 
         let (stderr, stdout, stdin) = (Pipe(), Pipe(), Pipe())
@@ -190,7 +189,7 @@ extension PipeWrench: XCTestObservation {
         let task = NSTask()
         task.executableURL = URL(fileURLWithPath: "/usr/bin/leaks")
         task.arguments = [
-            "\(memgraphLocation(for: name))"
+            "\(memgraphLocation(for: name))",
         ]
 
         let (stderr, stdout, stdin) = (Pipe(), Pipe(), Pipe())
@@ -217,7 +216,7 @@ extension PipeWrench: XCTestObservation {
                 }
 
                 let regex = try? NSRegularExpression(pattern: "0x(\\d|\\w)*", options: [])
-                let range = NSRange(location: 0, length: (line as NSString).length )
+                let range = NSRange(location: 0, length: (line as NSString).length)
                 regex?.enumerateMatches(in: line, options: [], range: range) { result, flags, stop in
                     if let result = result {
                         let result = (line as NSString).substring(with: result.range)
@@ -236,7 +235,7 @@ extension PipeWrench: XCTestObservation {
         task.executableURL = URL(fileURLWithPath: "/usr/bin/heap")
         task.arguments = [
             "--addresses=all",
-            "\(memgraphLocation(for: name))"
+            "\(memgraphLocation(for: name))",
         ]
 
         let (stderr, stdout, stdin) = (Pipe(), Pipe(), Pipe())

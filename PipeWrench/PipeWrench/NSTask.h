@@ -12,9 +12,10 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, NSTaskTerminationReason) {
-	NSTaskTerminationReasonExit = 1,
-	NSTaskTerminationReasonUncaughtSignal = 2
+    NSTaskTerminationReasonExit = 1,
+    NSTaskTerminationReasonUncaughtSignal = 2
 };
+
 
 @interface NSTask : NSObject
 
@@ -63,14 +64,16 @@ A block to be invoked when the process underlying the NSTask terminates.  Settin
 
 @end
 
+
 @interface NSTask (NSTaskConveniences)
 
-+ (nullable NSTask *)launchedTaskWithExecutableURL:(NSURL *)url arguments:(NSArray<NSString *> *)arguments error:(out NSError ** _Nullable)error terminationHandler:(void (^_Nullable)(NSTask *))terminationHandler;
++ (nullable NSTask *)launchedTaskWithExecutableURL:(NSURL *)url arguments:(NSArray<NSString *> *)arguments error:(out NSError **_Nullable)error terminationHandler:(void (^_Nullable)(NSTask *))terminationHandler;
 
 - (void)waitUntilExit;
-	// poll the runLoop in defaultMode until task completes
+// poll the runLoop in defaultMode until task completes
 
 @end
+
 
 @interface NSTask (NSDeprecated)
 
