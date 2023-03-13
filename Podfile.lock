@@ -1,0 +1,16 @@
+PODS:
+  - PipeWrench (0.1.0)
+
+DEPENDENCIES:
+  - PipeWrench (from `~/Development/PipeWrench`)
+
+EXTERNAL SOURCES:
+  PipeWrench:
+    :path: "~/Development/PipeWrench"
+
+SPEC CHECKSUMS:
+  PipeWrench: 8098cc7a162d93c5ab6103198bc830af5f669421
+
+PODFILE CHECKSUM: 8bd64d9d8d02cc7d97c616bd689831e46ee25249
+
+COCOAPODS: 1.12.0

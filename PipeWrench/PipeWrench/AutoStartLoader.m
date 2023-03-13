@@ -6,7 +6,11 @@
 //
 
 #import "AutoStartLoader.h"
+#if __has_include(<PipeWrench/PipeWrench-Swift.h>)
+#import <PipeWrench/PipeWrench-Swift.h>
+#elif __has_include("PipeWrench-Swift.h")
 #import "PipeWrench-Swift.h"
+#endif
 
 static PWPipeWrench *__PWPipeWrench_staticInstance__ = nil;
 
@@ -14,6 +18,9 @@ static PWPipeWrench *__PWPipeWrench_staticInstance__ = nil;
 
 + (void)load {
     BOOL enablePipeWrench = [NSProcessInfo.processInfo.environment[PipeWrenchConstants.Enabled] boolValue];
+
+    NSLog(@"PipeWrench started... enable status: %d", enablePipeWrench);
+
     if (enablePipeWrench) {
         // https://developer.apple.com/library/archive/documentation/Performance/Conceptual/ManagingMemory/Articles/MallocDebug.html
         setenv("MallocStackLogging", "1", 1);

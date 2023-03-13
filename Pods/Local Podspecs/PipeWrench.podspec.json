@@ -1,0 +1,28 @@
+{
+  "name": "PipeWrench",
+  "version": "0.1.0",
+  "summary": "An iOS library can detect leaks in tests",
+  "description": "Use PipeWrench in your test targets to detect leaks automatically",
+  "homepage": "https://github.com/zadr/PipeWrench",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": "PipeWrench Contributors",
+  "source": {
+    "git": "~/Development/PipeWrench/PipeWrench",
+    "tag": "0.1.0"
+  },
+  "requires_arc": true,
+  "platforms": {
+    "ios": "15.0"
+  },
+  "swift_versions": "5.0",
+  "source_files": [
+    "PipeWrench/**/*.{swift,h,m,c,mm}"
+  ],
+  "frameworks": "XCTest",
+  "cocoapods_version": ">= 1.4.0",
+  "static_framework": true,
+  "swift_version": "5.0"
+}

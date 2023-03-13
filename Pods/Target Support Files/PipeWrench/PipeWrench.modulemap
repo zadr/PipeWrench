@@ -1,0 +1,6 @@
+module PipeWrench {
+  umbrella header "PipeWrench-umbrella.h"
+
+  export *
+  module * { export * }
+}
