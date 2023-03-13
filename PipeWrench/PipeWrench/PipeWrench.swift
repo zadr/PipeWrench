@@ -49,18 +49,6 @@ public final class PipeWrench: NSObject {
 }
 
 extension PipeWrench: XCTestObservation {
-    public func testCase(_ testCase: XCTestCase, didRecord expectedFailure: XCTExpectedFailure) {
-        let location = expectedFailure.issue.sourceCodeContext.location!
-        let name = "\(location.fileURL.lastPathComponent):\(location.lineNumber)"
-        saveMemgraphToDisk(with: name)
-
-        if hasLeaks(fromMemgraph: name) {
-            logger.log("test  completed: has memory leak")
-
-            printLeaks(fromMemgraph: name)
-        }
-    }
-
     public func testCaseDidFinish(_ testCase: XCTestCase) {
         let name = testCase.name
         saveMemgraphToDisk(with: name)
