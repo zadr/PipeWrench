@@ -16,9 +16,7 @@ static PWPipeWrench *__PWPipeWrench_staticInstance__ = nil;
 
 + (void)load;
 {
-    BOOL enablePipeWrench = [NSProcessInfo.processInfo.environment[PipeWrenchConstants.Enabled] boolValue];
-
-    NSLog(@"PipeWrench started... enable status: %d", enablePipeWrench);
+    BOOL enablePipeWrench = [NSProcessInfo.processInfo.environment[PipeWrenchConstants.Enabled] boolValue] ?: 1;
 
     if (enablePipeWrench) {
         // https://developer.apple.com/library/archive/documentation/Performance/Conceptual/ManagingMemory/Articles/MallocDebug.html

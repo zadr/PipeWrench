@@ -16,6 +16,11 @@ public final class PipeWrench: NSObject {
     private var memgraphDirectory: String!
     private var memgraphNames = Set<String>()
 
+    private lazy var asXCTestObservation: Bool = {
+        let asTestObservation = ProcessInfo.processInfo.environment[PipeWrenchConstants.AsXCTestObservation] as? NSString
+        return asTestObservation?.boolValue ?? true
+    }()
+
     internal var logger: LogIngest
 
     @objc
@@ -23,6 +28,7 @@ public final class PipeWrench: NSObject {
         self.logger = logger
     }
 
+    /// Start PipeWrench
     @objc public func start() throws {
         if !isRunning {
             try addLoggers()
@@ -34,13 +40,18 @@ public final class PipeWrench: NSObject {
 
             isRunning = true
 
-            XCTestObservationCenter.shared.addTestObserver(self)
+            if asXCTestObservation {
+                XCTestObservationCenter.shared.addTestObserver(self)
+            }
         }
     }
 
     @objc public func stop() {
         if isRunning {
-            XCTestObservationCenter.shared.removeTestObserver(self)
+            if asXCTestObservation {
+                XCTestObservationCenter.shared.removeTestObserver(self)
+            }
+
             isRunning = false
 
             removeLoggers()
@@ -57,7 +68,8 @@ extension PipeWrench: XCTestObservation {
             logger.log("test bundle completed: has memory leak")
 
             printLeaks(fromMemgraph: name)
-            findAddressesForLeaks(fromMemgraph: name)
+        } else {
+            logger.log("It's good, no leaks detected! 👍")
         }
 
         let eraseOnCompletionEnvironment = ProcessInfo.processInfo.environment[PipeWrenchConstants.EraseMemgraphAfterTestCompletion] ?? "false"
@@ -97,7 +109,7 @@ extension PipeWrench: XCTestObservation {
 
     // MARK: - Methods That Do Things
 
-    private func saveMemgraphToDisk(with name: String) {
+    public func saveMemgraphToDisk(with name: String) {
         memgraphNames.insert(name)
 
         let task = NSTask()
@@ -125,7 +137,7 @@ extension PipeWrench: XCTestObservation {
         })
     }
 
-    private func hasLeaks(fromMemgraph name: String) -> Bool {
+    public func hasLeaks(fromMemgraph name: String) -> Bool {
         let task = NSTask()
         task.executableURL = URL(fileURLWithPath: "/usr/bin/leaks")
         task.arguments = [
@@ -148,7 +160,7 @@ extension PipeWrench: XCTestObservation {
         return task.terminationStatus == 1
     }
 
-    private func printLeaks(fromMemgraph name: String) {
+    public func printLeaks(fromMemgraph name: String) {
         let task = NSTask()
         task.executableURL = URL(fileURLWithPath: "/usr/bin/leaks")
         task.arguments = [
@@ -173,7 +185,7 @@ extension PipeWrench: XCTestObservation {
         })
     }
 
-    private func findAddressesForLeaks(fromMemgraph name: String) {
+    public func findAddressesForLeaks(fromMemgraph name: String) {
         let task = NSTask()
         task.executableURL = URL(fileURLWithPath: "/usr/bin/leaks")
         task.arguments = [

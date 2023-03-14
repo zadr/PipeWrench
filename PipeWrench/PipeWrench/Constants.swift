@@ -21,6 +21,14 @@ public final class PipeWrenchConstants: NSObject {
     /// Evaluated with truthiness as defined by NSNumber https://developer.apple.com/documentation/foundation/nsnumber/1410865-boolvalue
     public static let Enabled = "EnablePipeWrench"
 
+    ///
+    /// Environment variable to set if PipeWrench should be perform as a `XCTestObservation`
+    ///
+    /// If not set, PipeWrench will auto start as a default `XCTestObservation`
+    ///
+    /// This value may be a `Boolean` (YES/NO, true/false), a `Number` (0/1) or a `String` of the preceeding values.
+    public static let AsXCTestObservation = "PipeWrenchAsXCTestObservation"
+
     // MARK: - Memgraph Management
 
     ///
