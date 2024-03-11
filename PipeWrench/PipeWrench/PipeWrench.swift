@@ -86,6 +86,23 @@ extension PipeWrench: XCTestObservation {
 
     // MARK: - Helper Methods
 
+    @discardableResult
+    private func run(leaks arguments: [String], onRead: (String) -> Void = { _ in }, context: String = #function) -> Int32 {
+        let task = NSTask()
+        task.executableURL = URL(fileURLWithPath: "/usr/bin/leaks")
+        task.arguments = arguments
+
+        do {
+            try task.launchAndReturnError()
+        } catch {
+            logger.log("\(context) task.launch returns error \(error.localizedDescription)")
+        }
+
+        task.waitUntilExit()
+
+        return task.terminationStatus
+    }
+
     private func printValueFromPipe(_ string: String) {
         logger.log(string.replacingOccurrences(of: "\\n", with: "\n"))
     }
@@ -104,112 +121,43 @@ extension PipeWrench: XCTestObservation {
     }
 
     private func memgraphLocation(for name: String) -> String {
-        memgraphDirectory + "/\(name).memgraph"
+        let canonicalName = name
+            .replacingOccurrences(of: " ", with: "")
+            .replacingOccurrences(of: ":", with: "")
+        return memgraphDirectory + "/\(canonicalName).memgraph"
     }
 
     // MARK: - Methods That Do Things
 
     public func saveMemgraphToDisk(with name: String) {
         memgraphNames.insert(name)
-
-        let task = NSTask()
-        task.executableURL = URL(fileURLWithPath: "/usr/bin/leaks")
-        task.arguments = [
-            "\(getpid())",
-            "--outputGraph=\(memgraphLocation(for: name))",
-        ]
-
-        let (stderr, stdout, stdin) = (Pipe(), Pipe(), Pipe())
-        task.standardError = stderr
-        task.standardOutput = stdout
-        task.standardInput = stdin
-
-        do {
-            try task.launchAndReturnError()
-        } catch {
-            logger.log("saveMemgraphToDisk task.launch returns error \(error.localizedDescription)")
-        }
-
-        task.waitUntilExit()
-
-        read(from: stdout, named: "stdout", onRead: { string in
-            logger.log(string.replacingOccurrences(of: "\\n", with: "\n"))
-        })
+        run(leaks: ["--outputGraph=\(memgraphLocation(for: name))"])
     }
 
     public func hasLeaks(fromMemgraph name: String) -> Bool {
-        let task = NSTask()
-        task.executableURL = URL(fileURLWithPath: "/usr/bin/leaks")
-        task.arguments = [
+        let arguments = [
             "\(memgraphLocation(for: name))",
         ]
-
-        let (stderr, stdout, stdin) = (Pipe(), Pipe(), Pipe())
-        task.standardError = stderr
-        task.standardOutput = stdout
-        task.standardInput = stdin
-
-        do {
-            try task.launchAndReturnError()
-        } catch {
-            logger.log("hasLeaks task.launch returns error \(error.localizedDescription)")
-        }
-
-        task.waitUntilExit()
-
-        return task.terminationStatus == 1
+        return run(leaks: arguments) == 1
     }
 
     public func printLeaks(fromMemgraph name: String) {
-        let task = NSTask()
-        task.executableURL = URL(fileURLWithPath: "/usr/bin/leaks")
-        task.arguments = [
+        let arguments = [
             "\(memgraphLocation(for: name))",
         ]
-
-        let (stderr, stdout, stdin) = (Pipe(), Pipe(), Pipe())
-        task.standardError = stderr
-        task.standardOutput = stdout
-        task.standardInput = stdin
-
-        do {
-            try task.launchAndReturnError()
-        } catch {
-            logger.log("printLeaks task.launch returns error \(error.localizedDescription)")
-        }
-
-        task.waitUntilExit()
-
-        read(from: stdout, named: "stdout", onRead: { string in
-            logger.log(string.replacingOccurrences(of: "\\n", with: "\n"))
-        })
+        run(leaks: arguments, onRead: printValueFromPipe(_:))
     }
 
     public func findAddressesForLeaks(fromMemgraph name: String) {
-        let task = NSTask()
-        task.executableURL = URL(fileURLWithPath: "/usr/bin/leaks")
-        task.arguments = [
+        let arguments = [
             "\(memgraphLocation(for: name))",
         ]
 
-        let (stderr, stdout, stdin) = (Pipe(), Pipe(), Pipe())
-        task.standardError = stderr
-        task.standardOutput = stdout
-        task.standardInput = stdin
-
-        do {
-            try task.launchAndReturnError()
-        } catch {
-            logger.log("findAddressesForLeaks task.launch returns error \(error.localizedDescription)")
-        }
-
-        task.waitUntilExit()
-
-        //		for addr in `leaks ~/Desktop/MemgraphTests.xctest.memgraph | grep LEAK | awk '{ print $6 }’`
-        //		do
-        //			heap --addresses=all ~/Desktop/MemgraphTests.xctest.memgraph | grep $leak
-        //		done
-        read(from: stdout, named: "stdout", onRead: { string in
+        // for addr in `leaks ~/Desktop/MemgraphTests.xctest.memgraph | grep LEAK | awk '{ print $6 }’`
+        // do
+        //     heap --addresses=all ~/Desktop/MemgraphTests.xctest.memgraph | grep $leak
+        // done
+        run(leaks: arguments) { string in
             for line in string.components(separatedBy: "\n") {
                 if !line.contains("LEAK") {
                     continue
@@ -224,7 +172,7 @@ extension PipeWrench: XCTestObservation {
                     }
                 }
             }
-        })
+        }
     }
 
     // heap --addresses=all ~/Desktop/MemgraphTests.xctest.memgraph | grep $leak
@@ -238,23 +186,9 @@ extension PipeWrench: XCTestObservation {
             "\(memgraphLocation(for: name))",
         ]
 
-        let (stderr, stdout, stdin) = (Pipe(), Pipe(), Pipe())
-        task.standardError = stderr
-        task.standardOutput = stdout
-        task.standardInput = stdin
-
         task.launch()
         task.waitUntilExit()
 
         logger.log("addr \(address)")
-        read(from: stdin, named: "stdin", onRead: { string in
-            logger.log(string.replacingOccurrences(of: "\\n", with: "\n"))
-        })
-        read(from: stdout, named: "stdout", onRead: { string in
-            logger.log(string.replacingOccurrences(of: "\\n", with: "\n"))
-        })
-        read(from: stderr, named: "stderr", onRead: { string in
-            logger.log(string.replacingOccurrences(of: "\\n", with: "\n"))
-        })
     }
 }
