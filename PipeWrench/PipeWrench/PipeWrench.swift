@@ -131,7 +131,16 @@ extension PipeWrench: XCTestObservation {
 
     public func saveMemgraphToDisk(with name: String) {
         memgraphNames.insert(name)
-        run(leaks: ["--outputGraph=\(memgraphLocation(for: name))"])
+        let memgraphPath = memgraphLocation(for: name)
+        run(leaks: ["\(getpid())", "--outputGraph=\(memgraphPath)"])
+
+        let attachment = XCTAttachment(contentsOfFile: URL(fileURLWithPath: memgraphPath))
+        attachment.name = "Memory Graph of \(name)"
+        attachment.lifetime = .keepAlways
+
+        XCTContext.runActivity(named: "Generating Memgraph") { activity in
+            activity.add(attachment)
+        }
     }
 
     public func hasLeaks(fromMemgraph name: String) -> Bool {
