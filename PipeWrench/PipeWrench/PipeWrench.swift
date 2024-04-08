@@ -175,7 +175,7 @@ extension PipeWrench: XCTestObservation {
                 let regex = try? NSRegularExpression(pattern: "0x(\\d|\\w)*", options: [])
                 let range = NSRange(location: 0, length: (line as NSString).length)
                 regex?.enumerateMatches(in: line, options: [], range: range) { result, flags, stop in
-                    if let result = result {
+                    if let result {
                         let result = (line as NSString).substring(with: result.range)
                         printClass(for: result, fromMemgraph: name)
                     }

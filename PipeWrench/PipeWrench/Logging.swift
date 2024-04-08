@@ -69,7 +69,7 @@ internal extension PipeWrench {
         }
 
         let tentativePath = ProcessInfo.processInfo.environment[PipeWrenchConstants.DiskLoggingPath]
-        if let tentativePath = tentativePath {
+        if let tentativePath {
             let fileLogger = try FileLogger(path: tentativePath)
             logger.add(egressTarget: fileLogger)
         }
