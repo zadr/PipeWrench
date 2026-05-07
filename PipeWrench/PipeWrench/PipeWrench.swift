@@ -90,6 +90,17 @@ extension PipeWrench: XCTestObservation {
         task.executableURL = URL(fileURLWithPath: "/usr/bin/leaks")
         task.arguments = arguments
 
+        // Clean the environment for the leaks child process:
+        // - DYLD_ROOT_PATH: set by the simulator, prevents leaks from
+        //   respawning into the runtime's matching binary
+        // - DYLD_INSERT_LIBRARIES: injects test_sharder/test_repeater
+        //   dylibs that link XCTest, which isn't available when leaks
+        //   respawns into the simulator runtime context
+        var env = ProcessInfo.processInfo.environment
+        env.removeValue(forKey: "DYLD_ROOT_PATH")
+        env.removeValue(forKey: "DYLD_INSERT_LIBRARIES")
+        task.environment = env
+
         do {
             try task.launchAndReturnError()
         } catch {
@@ -127,10 +138,16 @@ extension PipeWrench: XCTestObservation {
 
     // MARK: - Methods That Do Things
 
-    public func saveMemgraphToDisk(with name: String) {
+    @discardableResult
+    public func saveMemgraphToDisk(with name: String) -> Bool {
         memgraphNames.insert(name)
         let memgraphPath = memgraphLocation(for: name)
         run(leaks: ["\(getpid())", "--outputGraph=\(memgraphPath)"])
+
+        guard FileManager.default.fileExists(atPath: memgraphPath) else {
+            logger.log("saveMemgraphToDisk: memgraph was not written to \(memgraphPath)")
+            return false
+        }
 
         let attachment = XCTAttachment(contentsOfFile: URL(fileURLWithPath: memgraphPath))
         attachment.name = "Memory Graph of \(name)"
@@ -139,6 +156,7 @@ extension PipeWrench: XCTestObservation {
         XCTContext.runActivity(named: "Generating Memgraph") { activity in
             activity.add(attachment)
         }
+        return true
     }
 
     public func hasLeaks(fromMemgraph name: String) -> Bool {
