@@ -58,7 +58,19 @@ public final class PipeWrench: NSObject {
 }
 
 extension PipeWrench: XCTestObservation {
+    public func testCaseWillStart(_ testCase: XCTestCase) {
+        // ZZZ_MemgraphCapture is a marker test that sorts last. Capture
+        // the bundle-level memgraph while a test case context is active.
+        if testCase is ZZZ_MemgraphCapture,
+           let bundleName = Bundle(for: type(of: testCase)).executableURL?.lastPathComponent
+        {
+            saveMemgraphToDisk(with: bundleName)
+        }
+    }
+
     public func testCaseDidFinish(_ testCase: XCTestCase) {
+        guard !(testCase is ZZZ_MemgraphCapture) else { return }
+
         let name = testCase.name
         saveMemgraphToDisk(with: name)
 
