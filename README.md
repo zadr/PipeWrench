@@ -1,16 +1,29 @@
 #### What Is This?
-PipeWrench is an iOS library that can be linked into a [testing target](https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/testing_with_xcode/chapters/01-introduction.html#//apple_ref/doc/uid/TP40014132) that automatically runs `leaks` when a test fails, and when a test suite finishes running.
+PipeWrench is an iOS library that can be linked into a [testing target](https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/testing_with_xcode/chapters/01-introduction.html#//apple_ref/doc/uid/TP40014132) that automatically runs `leaks` and captures a memory graph (`.memgraph`) when a test fails, and when a test suite finishes running.
 
 #### How Does It Work?
 PipeWrench copies `NSTask.h` from the macOS SDK, and then shells out to the [leaks](x-man-page://leaks) and [heap](x-man-page://heap) command line tool to do all the heavy lifting.
 
 Since iOS doesn't have `NSTask`, this PipeWrench is limited to running on the iOS Simulator.
 
+Memory graphs are written to disk (see `MemgraphRootDirectory` below) and can be opened in Xcode, e.g. `xed /tmp/PipeWrench/<uuid>/<TestBundle>.memgraph`. Because `XCTest` does not deliver attachments once a test suite has finished, the bundle-level graph is captured from a marker test, `ZZZ_MemgraphCapture`, which sorts last alphabetically so that it runs while a test-case context is still active.
+
 #### Why Wouldn't I Use The Memory Graph In Xcode?
 Can't press buttons manually when running automated tests on CI systems. Even if you could, it would be very tedious to have to press the same button all the time.
 
 #### Integration?
-This is a prototype. If you want to use PipeWrench, you'll have to add it as a submodule and deal with the xcodeproj manually.
+This is a prototype. If you want to use PipeWrench, you'll have to add it as a submodule and deal with the xcodeproj manually. A Bazel `BUILD` file is also provided under `PipeWrench/` for projects that build with Bazel.
+
+To capture a memory graph at an arbitrary point (rather than only on failure or suite finish), start PipeWrench yourself and call `saveMemgraphToDisk(with:)`:
+
+```swift
+import PipeWrench
+
+let pipeWrench = PipeWrench(logger: LogIngest())
+try? pipeWrench.start()
+// ...later...
+pipeWrench.saveMemgraphToDisk(with: "my-checkpoint")
+```
 
 #### Environment Variables
 There are a handful of environment variables that control PipeWrench's behavior. These are best set as part of the target's build and run configuration. Here is a brief overview of available environment variables:
