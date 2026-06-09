@@ -17,3 +17,9 @@ syntax: glob
 *DerivedData*
 *.xcworkspacedata
 *.xcodeproj/project.xcworkspace
+
+# Bazel build files (the *build* rule above would otherwise ignore them)
+!BUILD.bazel
+!**/BUILD.bazel
+!*.bzl
+!MODULE.bazel

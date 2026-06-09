@@ -1,0 +1,56 @@
+# Bazel build for PipeWrench.
+#
+# PipeWrench is a mixed Swift / Objective-C library meant to be linked into an
+# iOS Simulator test target. This file mirrors the Xcode target's layering:
+#
+#   NSTask.h  ->  PipeWrench (Swift core)  ->  AutoStartLoader.m (+load starter)
+#
+# It uses the public rules_swift / rules_apple rules. Add them to your
+# MODULE.bazel (or WORKSPACE), e.g.:
+#
+#   bazel_dep(name = "rules_swift", version = "...")
+#   bazel_dep(name = "rules_apple", version = "...")
+#
+# XCTest must be available to the toolchain (it is imported by the Swift
+# sources and by the marker test); when consumed from an `*_test` target that
+# is provided automatically.
+
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+package(default_visibility = ["//visibility:public"])
+
+# iOS has no public NSTask; PipeWrench redeclares it (copied from the macOS
+# SDK) and shells out to `leaks`/`heap` on the Simulator. Header-only, consumed
+# by the Swift core as a bridging module.
+objc_library(
+    name = "NSTask",
+    hdrs = ["PipeWrench/NSTask.h"],
+    module_name = "PipeWrenchNSTask",
+)
+
+# Swift core. Emits `PipeWrench-Swift.h` for the Objective-C starter to import.
+swift_library(
+    name = "PipeWrenchCore",
+    srcs = [
+        "PipeWrench/Constants.swift",
+        "PipeWrench/Errors.swift",
+        "PipeWrench/Logging.swift",
+        "PipeWrench/PathUtilities.swift",
+        "PipeWrench/PipeWrench.swift",
+        "PipeWrench/ZZZ_MemgraphCapture.swift",
+    ],
+    generated_header_name = "PipeWrench-Swift.h",
+    module_name = "PipeWrench",
+    deps = [":NSTask"],
+)
+
+# Public target: the Objective-C load-time starter plus the Swift core.
+# `alwayslink` keeps +load from being stripped by the linker.
+objc_library(
+    name = "PipeWrench",
+    srcs = ["PipeWrench/AutoStartLoader.m"],
+    hdrs = ["PipeWrench/AutoStartLoader.h"],
+    alwayslink = True,
+    sdk_frameworks = ["XCTest"],
+    deps = [":PipeWrenchCore"],
+)
