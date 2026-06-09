@@ -1,15 +1,13 @@
 //
 //  AutoStartLoader.h
-//  PipeWrenchTesting
+//  PipeWrench
 //
-//  Created by Steve Sun on 2023-03-13.
-//  Copyright © 2023 Square, Inc. All rights reserved.
+//  Created by Steve Sun on 2023-03-09.
 //
 
 #import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
-
 
 @interface AutoStartLoader : NSObject
 

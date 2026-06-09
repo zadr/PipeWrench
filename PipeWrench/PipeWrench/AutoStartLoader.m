@@ -1,22 +1,25 @@
 //
 //  AutoStartLoader.m
-//  PipeWrenchTesting
+//  PipeWrench
 //
-//  Created by Steve Sun on 2023-03-13.
-//  Copyright © 2023 Square, Inc. All rights reserved.
+//  Created by Steve Sun on 2023-03-09.
 //
 
 #import "AutoStartLoader.h"
-#import "PipeWrenchTesting-Swift.h"
+#if __has_include(<PipeWrench/PipeWrench-Swift.h>)
+#import <PipeWrench/PipeWrench-Swift.h>
+#elif __has_include("PipeWrench-Swift.h")
+#import "PipeWrench-Swift.h"
+#endif
 
 static PWPipeWrench *__PWPipeWrench_staticInstance__ = nil;
 
-
 @implementation AutoStartLoader
 
-+ (void)load;
-{
-    BOOL enablePipeWrench = [NSProcessInfo.processInfo.environment[PipeWrenchConstants.Enabled] boolValue] ?: 1;
++ (void)load {
+    BOOL enablePipeWrench = [NSProcessInfo.processInfo.environment[PipeWrenchConstants.Enabled] boolValue];
+
+    NSLog(@"PipeWrench started... enable status: %d", enablePipeWrench);
 
     if (enablePipeWrench) {
         // https://developer.apple.com/library/archive/documentation/Performance/Conceptual/ManagingMemory/Articles/MallocDebug.html
