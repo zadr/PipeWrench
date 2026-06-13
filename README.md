@@ -2,9 +2,9 @@
 PipeWrench is an iOS library that can be linked into a [testing target](https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/testing_with_xcode/chapters/01-introduction.html#//apple_ref/doc/uid/TP40014132) that automatically runs `leaks` and captures a memory graph (`.memgraph`) when a test fails, and when a test suite finishes running.
 
 #### How Does It Work?
-PipeWrench copies `NSTask.h` from the macOS SDK, and then shells out to the [leaks](x-man-page://leaks) and [heap](x-man-page://heap) command line tool to do all the heavy lifting.
+PipeWrench shells out to the [leaks](x-man-page://leaks) and [heap](x-man-page://heap) command line tools to do all the heavy lifting, spawning them with POSIX `posix_spawn`.
 
-Since iOS doesn't have `NSTask`, this PipeWrench is limited to running on the iOS Simulator.
+Since spawning child processes (and the `leaks`/`heap` tools themselves) is only available on the iOS Simulator, PipeWrench is limited to running there.
 
 Memory graphs are written to disk (see `MemgraphRootDirectory` below) and can be opened in Xcode, e.g. `xed /tmp/PipeWrench/<uuid>/<TestBundle>.memgraph`. Because `XCTest` does not deliver attachments once a test suite has finished, the bundle-level graph is captured from a marker test, `ZZZ_MemgraphCapture`, which sorts last alphabetically so that it runs while a test-case context is still active.
 

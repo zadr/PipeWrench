@@ -5,6 +5,7 @@
 //  Created by Zachary Drayer on 1/29/22.
 //
 
+import Darwin
 import XCTest
 
 @objc(PWPipeWrench)
@@ -98,30 +99,60 @@ extension PipeWrench: XCTestObservation {
 
     @discardableResult
     private func run(leaks arguments: [String], onRead: (String) -> Void = { _ in }, context: String = #function) -> Int32 {
-        let task = NSTask()
-        task.executableURL = URL(fileURLWithPath: "/usr/bin/leaks")
-        task.arguments = arguments
-
-        // Clean the environment for the leaks child process:
-        // - DYLD_ROOT_PATH: set by the simulator, prevents leaks from
-        //   respawning into the runtime's matching binary
-        // - DYLD_INSERT_LIBRARIES: injects test_sharder/test_repeater
-        //   dylibs that link XCTest, which isn't available when leaks
-        //   respawns into the simulator runtime context
+        // Strip simulator DYLD vars so `leaks` doesn't respawn into the runtime
+        // binary (DYLD_ROOT_PATH) or load XCTest-linked dylibs (DYLD_INSERT_LIBRARIES).
         var env = ProcessInfo.processInfo.environment
         env.removeValue(forKey: "DYLD_ROOT_PATH")
         env.removeValue(forKey: "DYLD_INSERT_LIBRARIES")
-        task.environment = env
 
-        do {
-            try task.launchAndReturnError()
-        } catch {
-            logger.log("\(context) task.launch returns error \(error.localizedDescription)")
+        return spawn("/usr/bin/leaks", arguments: arguments, environment: env, onRead: onRead, context: context)
+    }
+
+    /// Run `path` with `arguments` via POSIX `posix_spawn`, capturing
+    /// stdout+stderr and returning its exit status. Simulator-only: iOS has no
+    /// `NSTask`/`Process`, and child processes only work on the Simulator.
+    @discardableResult
+    private func spawn(_ path: String, arguments: [String], environment: [String: String], onRead: (String) -> Void = { _ in }, context: String = #function) -> Int32 {
+        // Build NULL-terminated argv and "KEY=VALUE" envp arrays for posix_spawn.
+        let argv: [UnsafeMutablePointer<CChar>?] = ([path] + arguments).map { strdup($0) } + [nil]
+        defer { argv.forEach { free($0) } }
+
+        let envp: [UnsafeMutablePointer<CChar>?] = environment.map { strdup("\($0)=\($1)") } + [nil]
+        defer { envp.forEach { free($0) } }
+
+        // Redirect the child's stdout + stderr into a pipe we can read.
+        var fds: [Int32] = [0, 0]
+        guard pipe(&fds) == 0 else {
+            logger.log("\(context) pipe failed: \(String(cString: strerror(errno)))")
+            return -1
+        }
+        let (readFD, writeFD) = (fds[0], fds[1])
+
+        var actions: posix_spawn_file_actions_t?
+        posix_spawn_file_actions_init(&actions)
+        posix_spawn_file_actions_adddup2(&actions, writeFD, STDOUT_FILENO)
+        posix_spawn_file_actions_adddup2(&actions, writeFD, STDERR_FILENO)
+        posix_spawn_file_actions_addclose(&actions, readFD)
+        defer { posix_spawn_file_actions_destroy(&actions) }
+
+        var pid: pid_t = 0
+        let rc = posix_spawn(&pid, path, &actions, nil, argv, envp)
+        close(writeFD)
+        guard rc == 0 else {
+            logger.log("\(context) posix_spawn failed: \(String(cString: strerror(rc)))")
+            close(readFD)
+            return -1
         }
 
-        task.waitUntilExit()
+        let handle = FileHandle(fileDescriptor: readFD, closeOnDealloc: true)
+        if let data = try? handle.readToEnd(), let string = String(data: data, encoding: .utf8) {
+            onRead(string)
+        }
 
-        return task.terminationStatus
+        var status: Int32 = 0
+        waitpid(pid, &status, 0)
+        // Hand-rolled WIFEXITED / WEXITSTATUS; the C macros aren't imported.
+        return (status & 0x7f) == 0 ? (status >> 8) & 0xff : -1
     }
 
     private func printValueFromPipe(_ string: String) {
@@ -216,15 +247,10 @@ extension PipeWrench: XCTestObservation {
     private func printClass(for address: String, fromMemgraph name: String) {
         logger.log("heap for \(address) \(memgraphLocation(for: name))")
 
-        let task = NSTask()
-        task.executableURL = URL(fileURLWithPath: "/usr/bin/heap")
-        task.arguments = [
+        spawn("/usr/bin/heap", arguments: [
             "--addresses=all",
             "\(memgraphLocation(for: name))",
-        ]
-
-        task.launch()
-        task.waitUntilExit()
+        ], environment: ProcessInfo.processInfo.environment)
 
         logger.log("addr \(address)")
     }

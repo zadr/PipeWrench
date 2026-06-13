@@ -32,7 +32,6 @@
 /* Begin PBXFileReference section */
 		192D029C27C0E12B0072C2C8 /* libPipeWrench.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPipeWrench.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		192D029F27C0E12B0072C2C8 /* PipeWrench.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipeWrench.swift; sourceTree = "<group>"; };
-		192D02AC27C0E14B0072C2C8 /* NSTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSTask.h; sourceTree = "<group>"; };
 		8E26311D29BB05E200261B22 /* AutoStartLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AutoStartLoader.h; sourceTree = "<group>"; };
 		8E26311E29BB05E200261B22 /* AutoStartLoader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AutoStartLoader.m; sourceTree = "<group>"; };
 		8E26312029BB05E200261B22 /* ZZZ_MemgraphCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZZZ_MemgraphCapture.swift; sourceTree = "<group>"; };
@@ -75,7 +74,6 @@
 		192D029E27C0E12B0072C2C8 /* PipeWrench */ = {
 			isa = PBXGroup;
 			children = (
-				192D02AC27C0E14B0072C2C8 /* NSTask.h */,
 				8E26311D29BB05E200261B22 /* AutoStartLoader.h */,
 				8E26311E29BB05E200261B22 /* AutoStartLoader.m */,
 				8E26312029BB05E200261B22 /* ZZZ_MemgraphCapture.swift */,
@@ -298,7 +296,6 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = PipeWrench/NSTask.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -319,7 +316,6 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = PipeWrench/NSTask.h;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
