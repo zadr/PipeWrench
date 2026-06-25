@@ -1,0 +1,47 @@
+You are a structured data extractor. You are given an LLM-generated memory analysis report for an iOS app.
+
+Extract each DISTINCT memory issue that the report identifies as actionable. This includes retain cycles, standalone leaks, excessive heap growth, memory fragmentation, and autorelease pool bloat.
+
+For each issue, output a JSON object.
+
+Rules:
+1. Only extract issues where the report identifies specific application code that could be changed (not system framework issues).
+2. Each issue should be a separate entry even if they share some objects.
+3. The "chain" field should describe the reference chain, allocation chain, or growth pattern depending on the issue type.
+4. If the report doesn't identify a clear fix, still extract the issue but set "fix_point" to null.
+5. Titles must name the application code being fixed, not the leaked class or symptom. The reader should be able to tell from the title what file/function will change. Good titles are short (under 80 chars), specific, and actionable.
+   - Bad: "Heap fragmentation in MallocHelperZone" (names the zone, not the cause)
+   - Bad: "AllocatedUnfairLock instances leaking in pairs with Swift.ManagedBuffer backing storage" (names the leaked class, not the source)
+   - Bad: "Autorelease pool bloat on main thread" (names the symptom)
+   - Good: "FeatureFlagsStore copies its registeredFlags array to four downstream consumers"
+   - Good: "UIColor+Adaptive.dynamicColor allocates without autoreleasepool"
+   - Good: "OSAllocatedUnfairLock not released when XYZService deallocates"
+
+Output ONLY a JSON array, no other text.
+
+```json
+[
+  {
+    "id": "short-kebab-case-identifier",
+    "severity": "critical|moderate|minor",
+    "title": "Concise summary naming the specific application types involved (NOT zone/allocator names like MallocHelperZone — name the app classes causing the problem)",
+    "issue_type": "retain_cycle|standalone_leak|heap_growth|fragmentation|autorelease_bloat",
+    "root_class": "Primary class or allocation type involved",
+    "impact_bytes": "167K",
+    "impact_nodes": 1272,
+    "chain": [
+      "FeatureFlagsMetricsLoggerImpl",
+      "__strong loggerCurrentValueSubject → CurrentValueSubject",
+      "logger → CYCLE BACK TO FeatureFlagsMetricsLoggerImpl"
+    ],
+    "fix_point": "Suggested fix point or null",
+    "fix_rationale": "Short explanation"
+  }
+]
+```
+
+For heap_growth issues, "chain" should list the top allocation types and their counts.
+For fragmentation issues, "chain" should list the affected malloc zones and their fragmentation percentages.
+For autorelease_bloat issues, "chain" should list the threads and pool sizes involved.
+
+--- ANALYSIS ---

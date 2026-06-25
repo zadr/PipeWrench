@@ -84,6 +84,18 @@ Process 78941: 1 leak for 32 total leaked bytes.
 
 which tells us there is one leak found, along with the memory address.
 
+#### Analyzing memgraphs
+`Scripts/` contains an optional, LLM-assisted pipeline for triaging the
+memory graphs PipeWrench produces. `analyze_memgraph.py` summarizes a single
+`.memgraph`, and `pipeline.py` runs a larger analyze/judge/fix loop. Both take
+`--provider claude|openai` (and a `--model`) and read the corresponding
+`ANTHROPIC_API_KEY` / `OPENAI_API_KEY` from the environment; they talk directly
+to the providers' public APIs and assume nothing about where the repo lives.
+
+```
+python3 Scripts/analyze_memgraph.py --provider claude --model <model> /path/to/Foo.memgraph
+```
+
 ## License
 
 PipeWrench is available under the MIT license.
