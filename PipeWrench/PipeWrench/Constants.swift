@@ -70,6 +70,18 @@ public final class PipeWrenchConstants: NSObject {
     /// This value may be a `Boolean` (YES/NO, true/false), a `Number` (0/1) or a `String` of the preceeding values.
     public static let ConsoleLoggingEnabled = "ConsoleLoggingEnabled"
 
+    // MARK: - Result Bundle
+
+    /// Environment variable containing the path to the xcresult bundle.
+    ///
+    /// When running under xcodebuild, the test runner should set this
+    /// so PipeWrench can write the bundle-level memgraph directly into
+    /// the result bundle at atexit time (after the Swift Testing runner
+    /// has finished but before xcodebuild finalizes the bundle).
+    ///
+    /// This value must be a `String` that represents a path on disk.
+    public static let ResultBundlePath = "PipeWrenchResultBundlePath"
+
     ///
     /// Environment variable to set for memgraph storage.
     ///

@@ -10,6 +10,9 @@
 		192D02A027C0E12B0072C2C8 /* PipeWrench.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192D029F27C0E12B0072C2C8 /* PipeWrench.swift */; };
 		8E26311F29BB05E200261B22 /* AutoStartLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E26311E29BB05E200261B22 /* AutoStartLoader.m */; };
 		8E26312129BB05E200261B22 /* ZZZ_MemgraphCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E26312029BB05E200261B22 /* ZZZ_MemgraphCapture.swift */; };
+		8E26312329BB05E200261B22 /* PipeWrench+Core.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E26312229BB05E200261B22 /* PipeWrench+Core.swift */; };
+		8E26312529BB05E200261B22 /* PipeWrench+SwiftTesting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E26312429BB05E200261B22 /* PipeWrench+SwiftTesting.swift */; };
+		8E26312729BB05E200261B22 /* PipeWrench+XCTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E26312629BB05E200261B22 /* PipeWrench+XCTest.swift */; };
 		192D02B127C0E1610072C2C8 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 192D02B027C0E1610072C2C8 /* XCTest.framework */; };
 		19AA268228E8D8F100B824A2 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AA268128E8D8F100B824A2 /* Constants.swift */; };
 		19AA268428E8DE3200B824A2 /* PathUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AA268328E8DE3200B824A2 /* PathUtilities.swift */; };
@@ -35,6 +38,9 @@
 		8E26311D29BB05E200261B22 /* AutoStartLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AutoStartLoader.h; sourceTree = "<group>"; };
 		8E26311E29BB05E200261B22 /* AutoStartLoader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AutoStartLoader.m; sourceTree = "<group>"; };
 		8E26312029BB05E200261B22 /* ZZZ_MemgraphCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZZZ_MemgraphCapture.swift; sourceTree = "<group>"; };
+		8E26312229BB05E200261B22 /* PipeWrench+Core.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PipeWrench+Core.swift"; sourceTree = "<group>"; };
+		8E26312429BB05E200261B22 /* PipeWrench+SwiftTesting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PipeWrench+SwiftTesting.swift"; sourceTree = "<group>"; };
+		8E26312629BB05E200261B22 /* PipeWrench+XCTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PipeWrench+XCTest.swift"; sourceTree = "<group>"; };
 		192D02B027C0E1610072C2C8 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		19AA268128E8D8F100B824A2 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		19AA268328E8DE3200B824A2 /* PathUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathUtilities.swift; sourceTree = "<group>"; };
@@ -78,6 +84,9 @@
 				8E26311E29BB05E200261B22 /* AutoStartLoader.m */,
 				8E26312029BB05E200261B22 /* ZZZ_MemgraphCapture.swift */,
 				192D029F27C0E12B0072C2C8 /* PipeWrench.swift */,
+				8E26312229BB05E200261B22 /* PipeWrench+Core.swift */,
+				8E26312429BB05E200261B22 /* PipeWrench+SwiftTesting.swift */,
+				8E26312629BB05E200261B22 /* PipeWrench+XCTest.swift */,
 				19AA268728E907BD00B824A2 /* Errors.swift */,
 				19AA268528E8DE6300B824A2 /* Logging.swift */,
 				19AA268328E8DE3200B824A2 /* PathUtilities.swift */,
@@ -157,6 +166,9 @@
 				19AA268628E8DE6300B824A2 /* Logging.swift in Sources */,
 				8E26311F29BB05E200261B22 /* AutoStartLoader.m in Sources */,
 				8E26312129BB05E200261B22 /* ZZZ_MemgraphCapture.swift in Sources */,
+				8E26312329BB05E200261B22 /* PipeWrench+Core.swift in Sources */,
+				8E26312529BB05E200261B22 /* PipeWrench+SwiftTesting.swift in Sources */,
+				8E26312729BB05E200261B22 /* PipeWrench+XCTest.swift in Sources */,
 				19AA268228E8D8F100B824A2 /* Constants.swift in Sources */,
 				19AA268828E907BD00B824A2 /* Errors.swift in Sources */,
 				19AA268428E8DE3200B824A2 /* PathUtilities.swift in Sources */,
